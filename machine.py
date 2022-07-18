@@ -23,12 +23,15 @@ class Machine:
         wol.send_magic_packet(self.__mac)
 
     def shutdown(self, ssh_key_file: str or Path):
-        key = RSAKey.from_private_key_file(ssh_key_file)
-        ssh = SSHClient()
-        ssh.set_missing_host_key_policy(AutoAddPolicy())
-        ssh.connect(hostname=self.__ip, username=self.__ssh_user, pkey=key)
-        ssh.exec_command('sudo shutdown now')
-        ssh.close()
+        try:
+            key = RSAKey.from_private_key_file(ssh_key_file)
+            ssh = SSHClient()
+            ssh.set_missing_host_key_policy(AutoAddPolicy())
+            ssh.connect(hostname=self.__ip, username=self.__ssh_user, pkey=key)
+            ssh.exec_command('sudo shutdown now')
+            ssh.close()
+        except Exception:
+            pass
 
     def status(self) -> bool:
         proc = subprocess.Popen(['/usr/bin/ping', '-c', '1', self.__ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
