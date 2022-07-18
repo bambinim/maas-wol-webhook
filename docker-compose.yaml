@@ -1,0 +1,9 @@
+services:
+  maas-wol-webhook:
+    container_name: maas-wol-webhook
+    image: maas-wol-webhook:0.1.0
+    network_mode: host
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      SSH_KEY_PATH: ~/.ssh/id_rsa
